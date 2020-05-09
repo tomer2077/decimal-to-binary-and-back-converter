@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Binary to Decimal and back converter</title>
+    <style>
+        textarea {
+            background: transparent;
+            border: none;
+            resize: none;
+            font-family: consolas;
+            display: table-cell;
+            text-align: center;
+            /* vertical-align: middle; */
+            font-size: 2rem;
+            width: 100%;
+        }
+
+        #grid-bg {
+            /* z-index: -1; */
+            max-width: 100%;
+            height: auto;
+            grid-area: pic;
+        }
+
+        #grid-container {
+            display: grid;
+            grid-template-columns: 0.1fr 2fr 0.8fr 1.4fr 0.7fr;
+            grid-template-rows: 1.0fr 1fr 1.1fr;
+            grid-template-areas: 
+            "pic pic pic pic pic"
+            "pic pic pic pic pic"
+            "pic pic pic pic pic";
+            min-width: 772px;
+            max-width: 1142px;
+            border: 1px solid black;
+            box-shadow: black 1px 1px 10px;
+        }
+
+        #binary-textfield {
+            color: white;
+            grid-column: 4;
+            grid-row: 2;
+        }
+
+        #decimal-textfield {
+            grid-column: 2;
+            grid-row: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="grid-container">
+        <img id="grid-bg" src="Untitled.png">
+        <textarea id="binary-textfield" placeholder="Binary"></textarea>
+        <textarea id="decimal-textfield" placeholder="Decimal"></textarea>
+    </div>
+
+    <script>
+        const binary_textarea = document.getElementById("binary-textfield");
+        
+        const decimal_textarea = document.getElementById("decimal-textfield");
+        
+        decimal_textarea.oninput = () => {
+            // don't try to convert if some input isn't a decimal digit
+            for (let i = 0; i < decimal_textarea.value.length; i++)
+            {
+                if (!(decimal_textarea.value[i] >= '0' &&
+                    decimal_textarea.value[i] <= '9'))
+                    return;
+            }
+
+            let decimal = parseInt(decimal_textarea.value);
+            
+            if (decimal_textarea.value === '')
+                return;
+            if (decimal === "1")
+                { binary_textarea.value = "1"; }
+            else if (decimal === "0")
+                { binary_textarea.value = "0"; }
+
+            let x = 1, y = 0;
+
+            // find the number of bits needed to represent the decimal
+            while (!
+                    (decimal <= Math.pow(2, x)-1 && decimal > Math.pow(2, y)-1)
+                   )
+            { x++; y++; }
+
+            let binary = new Array(x);
+
+            let numLeftToConvert = decimal;
+
+            for (let i = 0, exp = x-1; i < binary.length; i++, exp--)
+            {
+                if (Math.pow(2, exp) <= numLeftToConvert) {    
+                    binary[i] = '1';
+                    numLeftToConvert -= Math.pow(2, exp);
+                }
+                else {
+                    binary[i] = '0';
+                }
+            }
+
+            // convery array of bits to string 'output'
+            let output = "";
+
+            for (let i=0; i < binary.length; i++) {
+                output += binary[i];
+            }
+
+            binary_textarea.value = String(output);
+        }
+
+        binary_textarea.oninput = () => {
+            let binaryInputString = binary_textarea.value;
+
+            let pow = binary_textarea.value.length - 1;
+
+            let b = binary_textarea.value;
+            let d = 0;
+            let i = 0;
+
+            for (i, pow; i < binaryInputString.length; i++, --pow) {
+                d += b[i] * Math.pow(2, pow);
+            }
+
+            decimal_textarea.value = String(d);
+        }
+    </script>
+</body>
+</html>
