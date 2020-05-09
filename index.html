@@ -10,13 +10,16 @@
             font-family: consolas;
             display: table-cell;
             text-align: center;
-            /* vertical-align: middle; */
             font-size: 2rem;
             width: 100%;
+            z-index: +1;
+        }
+
+        textarea:active {
+            border: none;
         }
 
         #grid-bg {
-            /* z-index: -1; */
             max-width: 100%;
             height: auto;
             grid-area: pic;
@@ -33,18 +36,17 @@
             min-width: 772px;
             max-width: 1142px;
             border: 1px solid black;
-            box-shadow: black 1px 1px 10px;
         }
 
         #binary-textfield {
             color: white;
-            grid-column: 4;
-            grid-row: 2;
+            grid-column: 4/5;
+            grid-row: 2/3;
         }
 
         #decimal-textfield {
-            grid-column: 2;
-            grid-row: 2;
+            grid-column: 2/3;
+            grid-row: 2/3;
         }
     </style>
 </head>
@@ -71,6 +73,7 @@
 
             let decimal = parseInt(decimal_textarea.value);
             
+            // 
             if (decimal_textarea.value === '')
                 return;
             if (decimal === "1")
@@ -113,17 +116,13 @@
 
         binary_textarea.oninput = () => {
             let binaryInputString = binary_textarea.value;
-
             let pow = binary_textarea.value.length - 1;
-
             let b = binary_textarea.value;
             let d = 0;
             let i = 0;
-
             for (i, pow; i < binaryInputString.length; i++, --pow) {
                 d += b[i] * Math.pow(2, pow);
             }
-
             decimal_textarea.value = String(d);
         }
     </script>
